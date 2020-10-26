@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "I wonder what this does...",
   "main": "index.js",
-  "keywords": ["top", "secret"],
+  "keywords": [
+    "top",
+    "secret"
+  ],
   "author": "Matt Harrison <hi@matt-harrison.com",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
     "node-hue-api": "^4.0.9"
   }
 }
