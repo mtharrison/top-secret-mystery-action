@@ -17,7 +17,7 @@ const main = async () => {
 
     console.log(process.env);
 
-    const color = colors[ActionsCore.getInput('color')];
+    const color = colors[ActionsCore.getInput('color').trim()];
     console.log(`Input "color": ${color}`);
 
     console.log('Trigged by webhook event:');
