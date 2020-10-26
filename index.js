@@ -15,16 +15,14 @@ const colors = {
 
 const main = async () => {
 
-    console.log(process.env);
-
     const color = colors[ActionsCore.getInput('color').trim()];
     console.log(`Input "color": ${color}`);
 
     console.log('Trigged by webhook event:');
     console.log(JSON.stringify(ActionsGithub.context.payload, null, 2));
 
-    const remoteBootstrap = HueV3.api.createRemote(CLIENT_ID, CLIENT_SECRET);
-    const api = await remoteBootstrap.connectWithTokens(ACCESS_TOKEN, REFRESH_TOKEN, USERNAME);
+    const remoteBootstrap = HueV3.api.createRemote(process.env.CLIENT_ID, process.env.CLIENT_SECRET);
+    const api = await remoteBootstrap.connectWithTokens(process.env.ACCESS_TOKEN, process.env.REFRESH_TOKEN, process.env.USERNAME);
 
     const lights = await api.lights.getAll();
 
