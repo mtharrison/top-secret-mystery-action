@@ -1,0 +1,9 @@
+name: 'top-secret-mystery-action'
+description: 'I wonder what this does...'
+inputs:
+  color:
+    description: 'pick a colour: pink, blue, red, green, white'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'

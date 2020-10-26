@@ -1,0 +1,13 @@
+{
+  "name": "@mtharrison/top-secret-mystery-action",
+  "version": "1.0.0",
+  "description": "I wonder what this does...",
+  "main": "index.js",
+  "keywords": ["top", "secret"],
+  "author": "Matt Harrison <hi@matt-harrison.com",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "node-hue-api": "^4.0.9"
+  }
+}
