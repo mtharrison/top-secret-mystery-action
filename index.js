@@ -1,6 +1,5 @@
 'use strict';
 
-const Chalk = require('chalk');
 const HueV3 = require('node-hue-api').v3;
 
 const colors = {
@@ -20,7 +19,6 @@ const main = async () => {
         throw new Error(`Cannot set to ${colorInput}, no such color exists`);
     }
 
-    console.log(`Triggered by ${Chalk.bgBlue(ActionsGithub.context.payload.pusher.name)}`);
     console.log(`Input "color": ${colorInput} (xy: ${color})`);
 
     const remoteBootstrap = HueV3.api.createRemote(process.env.CLIENT_ID, process.env.CLIENT_SECRET);
