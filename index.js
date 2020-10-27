@@ -1,22 +1,19 @@
 'use strict';
 
-const ActionsCore = require('@actions/core');
-const ActionsGithub = require('@actions/github');
-
 const Chalk = require('chalk');
 const HueV3 = require('node-hue-api').v3;
 
 const colors = {
-    pink: '63307',
-    blue: '46014',
-    red: '1271',
-    green: '21851',
-    white: '8402'
+    pink: [0.6264, 0.2768],
+    blue: [0.1541, 0.0806],
+    red: [0.6656, 0.3278],
+    green: [0.2464, 0.6426],
+    white: [0.5203, 0.4369]
 }
 
 const main = async () => {
 
-    const colorInput = ActionsCore.getInput('color').trim();
+    const colorInput = process.env.INPUT_COLOR;
     const color = colors[colorInput];
 
     if (!color) {
@@ -24,25 +21,28 @@ const main = async () => {
     }
 
     console.log(`Triggered by ${Chalk.bgBlue(ActionsGithub.context.payload.pusher.name)}`);
-    console.log(`Input "color": ${colorInput} (hue: ${color})`);
+    console.log(`Input "color": ${colorInput} (xy: ${color})`);
 
     const remoteBootstrap = HueV3.api.createRemote(process.env.CLIENT_ID, process.env.CLIENT_SECRET);
     const api = await remoteBootstrap.connectWithTokens(process.env.ACCESS_TOKEN, process.env.REFRESH_TOKEN, process.env.USERNAME);
 
     const lights = await api.lights.getAll();
 
-    await Promise.all(lights.map(({ id, name }) => {
+    await Promise.all(lights.map(({ name, id, capabilities }) => {
 
-        console.log(`Setting "${name}" ${colorInput} (hue: ${color})`);
+        if (capabilities.control.ct) {
+            console.log(`Setting "${name}" ${colorInput} (xy: ${color})`);
 
-        return api.lights.setLightState(id, {
-            on: true,
-            bri: 254,
-            sat: 254,
-            hue: color
-        });
+            const state = {
+                on: true,
+                bri: 254,
+                sat: 254,
+                xy: color
+            };
+
+            return api.lights.setLightState(id, state);
+        }
     }));
-
 };
 
 main();
