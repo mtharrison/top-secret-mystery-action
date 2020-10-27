@@ -3,6 +3,7 @@
 const ActionsCore = require('@actions/core');
 const ActionsGithub = require('@actions/github');
 
+const Chalk = require('chalk');
 const HueV3 = require('node-hue-api').v3;
 
 const colors = {
@@ -15,11 +16,15 @@ const colors = {
 
 const main = async () => {
 
-    const color = colors[ActionsCore.getInput('color').trim()];
-    console.log(`Input "color": ${color}`);
+    const colorInput = ActionsCore.getInput('color').trim();
+    const color = colors[colorInput];
 
-    console.log('Trigged by webhook event:');
-    console.log(JSON.stringify(ActionsGithub.context.payload, null, 2));
+    if (!color) {
+        throw new Error(`Cannot set to ${colorInput}, no such color exists`);
+    }
+
+    console.log(`Triggered by ${Chalk.bgBlue(ActionsGithub.context.payload.pusher.name)}`);
+    console.log(`Input "color": ${colorInput} (hue: ${color})`);
 
     const remoteBootstrap = HueV3.api.createRemote(process.env.CLIENT_ID, process.env.CLIENT_SECRET);
     const api = await remoteBootstrap.connectWithTokens(process.env.ACCESS_TOKEN, process.env.REFRESH_TOKEN, process.env.USERNAME);
@@ -28,9 +33,9 @@ const main = async () => {
 
     await Promise.all(lights.map(({ id, name }) => {
 
-        console.log(`Setting ${name} to hue:${color}`);
+        console.log(`Setting "${name}" ${colorInput} (hue: ${color})`);
 
-        return api.lights.setLightState(id, {
+        return api.lights.setLightStatse(id, {
             on: true,
             bri: 254,
             sat: 254,
