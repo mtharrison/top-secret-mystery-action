@@ -35,7 +35,7 @@ const main = async () => {
 
         console.log(`Setting "${name}" ${colorInput} (hue: ${color})`);
 
-        return api.lights.setLightStatse(id, {
+        return api.lights.setLightState(id, {
             on: true,
             bri: 254,
             sat: 254,
